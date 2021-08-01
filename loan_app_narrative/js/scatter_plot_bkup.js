@@ -144,28 +144,48 @@ var mouseleave = function(d) {
                .style("opacity", 0);
      });
       
-  const annotationsClear = [
-  {
-    note: {
-      //label: "Here is the annotation label",
-      title: "",
-      wrap: 110,
-      padding: 3
-    },
-    connector: {
-      end: "arrow",        // none, or arrow or dot
-      type: "line",       // Line or curve
-      points: 1,           // Number of break in the curve
-      lineType : "horizontal"
-    },
-    color: ["black"],
-    x: 720,
-    y: 270,
-    dy: 50,
-    dx: 35
-  }
-]  
  
+  var clicked = ""
+  
+  var legend = svg.selectAll(".legend")
+    .data(color.domain())
+  .enter().append("g")
+    .attr("class", "legend")
+    .attr("transform", function(d, i) { return "translate(0," + i * 30 + ")"; });
+
+  legend.append("path")
+    .style("fill", function(d) { return color(d); })
+    	.attr("d", function(d, i) { return symbol.type(symbols(d))(); })
+	    .attr("transform", function(d, i) { 
+    		return "translate(" + (width + 90) + "," + 80 + ")";
+  		})
+  		.on("click",function(d){
+   d3.selectAll(".symbol").style("opacity",1)
+   
+   
+   if (clicked !== d){
+     d3.selectAll(".symbol")
+       .filter(function(e){
+       return e.Loan_Status !== d;
+     })
+       .style("opacity",0.1)
+     clicked = d
+   }
+    else{
+      clicked = ""
+    }
+  });
+ 
+  legend.append("text")
+      .attr("x", width + 70)
+      .attr("y", 80)
+      .attr("dy", ".40em")
+      .style("text-anchor", "end")
+      .text(function(d) { return d; })
+      .attr("fill","white");
+
+});
+
 const annotationsRight = [
   {
     note: {
@@ -204,76 +224,5 @@ d3.select("svg")
   .attr('stroke', "yellow")
   .attr('fill', "yellow")
   
-
-  var clicked = ""
-  
-  var legend = svg.selectAll(".legend")
-    .data(color.domain())
-  .enter().append("g")
-    .attr("class", "legend")
-    .attr("transform", function(d, i) { return "translate(0," + i * 30 + ")"; });
-
-  legend.append("path")
-    .style("fill", function(d) { return color(d); })
-    	.attr("d", function(d, i) { return symbol.type(symbols(d))(); })
-	    .attr("transform", function(d, i) { 
-    		return "translate(" + (width + 90) + "," + 80 + ")";
-  		})
-  		.on("click",function(d){
-   d3.selectAll(".symbol").style("opacity",1)
-   
-   
-   if (clicked !== d){
-     d3.selectAll(".symbol")
-       .filter(function(e){
-       return e.Loan_Status !== d;
-     })
-       .style("opacity",0.1)
-
-    const makeannotationsClear = d3.annotation().annotations(annotationsClear)
-  
-
-    d3.select("svg")
-      .append("g")
-      .call(makeannotationsClear)
-  
-      d3.select("svg").selectAll(".connector").style("opacity",0.1)
-      d3.select("svg").selectAll(".connector-end").style("opacity",0.1)
-     clicked = d
-   }
-    else{
-      clicked = ""
-
-        const makeAnnotationsRight = d3.annotation()
-  .annotations(annotationsRight)
-  
-
-d3.select("svg")
-  .append("g")
-  .call(makeAnnotationsRight)
-  
-  d3.select("svg").selectAll(".connector")
-  .attr('stroke', "yellow")
-  .style("stroke-dasharray", ("3, 3"))
-  d3.select("svg").selectAll(".connector-end")
-  .attr('stroke', "yellow")
-  .attr('fill', "yellow")
-
-    }
-  });
- 
-  legend.append("text")
-      .attr("x", width + 70)
-      .attr("y", 80)
-      .attr("dy", ".40em")
-      .style("text-anchor", "end")
-      .text(function(d) { return d; })
-      .attr("fill","white");
-
-});
-
-
-
-
 
 }
