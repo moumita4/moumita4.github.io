@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Page Title</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+}
+
+/* Style the header */
+.header {
+  padding: 10px;
+  text-align: center;
+  background: black;
+  color: #ea853c;
+}
+
+/* Increase the font size of the h1 element */
+.header h1 {
+  font-size: 40px;
+}
+
+/* Style the top navigation bar */
+.navbar {
+  overflow: hidden;
+  background-color: grey;
+}
+
+/* Style the navigation bar links */
+.navbar a {
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 20px;
+  text-decoration: none;
+}
+
+/* Right-aligned link */
+.navbar a.right {
+  float: right;
+}
+
+/* Change color on hover */
+.navbar a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Column container */
+.row {  
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Create two unequal columns that sits next to each other */
+/* Sidebar/left column */
+.side {
+  flex: 30%;
+  background-color: #f1f1f1;
+  padding: 20px;
+}
+
+/* Main column */
+.main {   
+  flex: 70%;
+  background-color: white;
+  padding: 20px;
+}
+
+/* Fake image, just for this example */
+.fakeimg {
+  background-color: #aaa;
+  width: 100%;
+  padding: 20px;
+}
+
+/* Fake image, just for this example */
+.img {
+  background-color: #aaa;
+  width: 100%;
+  padding: 20px;
+}
+
+.footer {   
+  padding: 20px;
+}
+
+/* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 700px) {
+  .row {   
+    flex-direction: column;
+  }
+}
+
+/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
+@media screen and (max-width: 400px) {
+  .navbar a {
+    float: none;
+    width:100%;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>What Affects Your Ability to Get a Loan?</h1>
+  <p>Factors worth looking at</p>
+</div>
+
+<div class="navbar">
+  <a href="index.html">Home</a>
+  <a href="loan_dependents.html" class="right">Next</a>
+</div>
+
+<div class="row">
+  
+  <div class="main">
+    <h2>Behind every loan approval, there stands great information about a client</h2>
+    <div >
+      <img src="images/loan-image.jpeg" alt="Loan approval image" style="height:300px;width: 100%; border: 5px solid #555;">
+    </div>
+    <p>We will be talking  about some  of the common factors which leads to Loan Approval. Lot of companies in financial sector are trying to automate the loan approval process, based on the various attributes of a borrowers profile</p>
+    <p>In this story, we will cover some of the very interesting trends in borrowers user profilfe  which can help us understand how it impacts their chances of loan approval. Banks turn down loans for a bunch of different reasons and here we will have an open discussion about few of the borrower attrbiutes and how they change with the loan status.</p>
+  </div>
+</div>
+<div class="footer">
+  <h4>This data was taken from Kaggle. Here is the link to it : https://www.kaggle.com/ninzaami/loan-predication</h2>
+</div>
+</body>
+</html>
+

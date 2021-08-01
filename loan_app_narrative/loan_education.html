@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src='https://d3js.org/d3.v5.min.js'></script>
+<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+<script type="text/javascript" src="js/dynamic_donut_chart.js"></script>
+<title>Page Title</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+}
+
+.centered {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: left;
+}
+
+/* Style the header */
+.header {
+  padding: 5px;
+  text-align: center;
+  background: black;
+  color: #ea853c;
+}
+
+/* Increase the font size of the h1 element */
+.header h1 {
+  font-size: 40px;
+}
+
+/* Style the top navigation bar */
+.navbar {
+  overflow: hidden;
+  background-color: grey;
+}
+
+/* Style the navigation bar links */
+.navbar a {
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 20px;
+  text-decoration: none;
+}
+
+/* Right-aligned link */
+.navbar a.right {
+  float: right;
+}
+
+/* Change color on hover */
+.navbar a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Column container */
+.row {  
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Create two unequal columns that sits next to each other */
+/* Sidebar/left column */
+.side {
+  flex: 30%;
+  background-color: #f1f1f1;
+  padding: 20px;
+}
+
+/* Main column */
+.main {   
+  flex: 70%;
+  background-color: white;
+  padding: 20px;
+}
+
+/* Fake image, just for this example */
+.fakeimg {
+  background-color: #aaa;
+  width: 100%;
+  padding: 20px;
+}
+
+/* Fake image, just for this example */
+.img {
+  background-color: #aaa;
+  width: 100%;
+  padding: 20px;
+}
+
+.footer {   
+  flex: 70%;
+  padding: 20px;
+}
+
+svg {
+  width: 80%;
+  height: 100%;
+}
+
+path.slice{
+  stroke-width:2px;
+}
+
+polyline{
+  opacity: .3;
+  stroke: white;
+  stroke-width: 3px;
+  fill: none;
+}
+
+.labelValue
+{
+  font-size: 60%;
+  opacity: .5;
+  stroke: white;
+  fill: white;
+  
+}
+
+.toolTip {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    position: absolute;
+    display: none;
+    width: auto;
+    height: auto;
+    background: none repeat scroll 0 0 lightblue;
+    border: 0 none;
+    border-radius: 8px 8px 8px 8px;
+    box-shadow: -3px 3px 15px #888888;
+    color: black;
+    font: 12px sans-serif;
+    padding: 5px;
+    text-align: center;
+}
+text {
+  font: 12px sans-serif;
+  fill: white;
+}
+
+/* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 700px) {
+  .row {   
+    flex-direction: column;
+  }
+}
+
+/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
+@media screen and (max-width: 400px) {
+  .navbar a {
+    float: none;
+    width:100%;
+  }
+}
+</style>
+</head>
+<body body onload='init()'>
+
+<div class="header">
+  <h1>What Affects Your Ability to Get a Loan?</h1>
+  <p>Factors worth looking at</p>
+</div>
+
+<div class="navbar">
+  <a href="index.html">Home</a>
+  <a href="loan_income_status.html" class="right">Next</a>
+</div>
+
+<div class="row">
+  
+  <div class="main">
+    <h2>Behind every loan approval, there stands great information about a client</h2>
+    <div>
+         <p><i>Please select the button below to see loan status vs education change.</i></p>
+        <form>
+            <label><input type="radio" name="dataset" id="dataset" value="total" checked color: #0B4DB7> Overall</label>
+            <label><input type="radio" name="dataset" id="dataset" value="option1"> Approved</label>
+            <label><input type="radio" name="dataset" id="dataset" value="option2"> Rejected </label>
+        </form>
+     </div> 
+
+     <div >
+        <div  id="my_dataviz" style="background-color:black"></div>
+    </div>
+
+    <p>Education is definitely an important factor and somehow ties us  also to an applicants job and income</p>
+    <p>Here we see the  distribution of approved and rejected loans and the % of borrowers having a graduate degree or not. 80% of approved loan borrowers having a graduate degree.</p>
+  </div>
+</div>
+
+<div class="footer">
+  <h4>This data was taken from Kaggle. Here is the link to it : https://www.kaggle.com/ninzaami/loan-predication</h2>
+</div>
+
+<script>
+
+var datasetTotal;
+var datasetOption1;
+var datasetOption2;
+
+d3.select("input[value='total']").property("checked", true);
+
+
+//var width = 960,
+   // height = 450,
+    //radius = Math.min(width, height) / 2;
+
+var   margin = {top: 20, right: 30, bottom: 80, left: 30},
+    width = 1400 - margin.left - margin.right,
+    height =650- margin.top - margin.bottom,
+    radius = Math.min(width, height) / 2;
+
+var svg = d3.select("#my_dataviz")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    
+svg.append("g")
+    .attr("class", "slices");
+svg.append("g")
+    .attr("class", "labelName");
+svg.append("g")
+    .attr("class", "labelValue");
+svg.append("g")
+    .attr("class", "lines");
+
+
+
+var pie = d3.pie()
+    .sort(null)
+    .value(function(d) {
+        return d.value;
+    });
+        
+
+
+var arc = d3.arc()
+    .outerRadius(radius * 0.8)
+    .innerRadius(radius * 0.4);
+
+var outerArc = d3.arc()
+    .innerRadius(radius * 0.9)
+    .outerRadius(radius * 0.9);
+
+var legendRectSize = (radius * 0.05);
+var legendSpacing = radius * 0.02;
+
+
+var div = d3.select("#my_dataviz").append("div").attr("class", "toolTip");
+
+svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+//svg.attr("transform",
+  //        "translate(" + margin.left + "," + margin.top + ")");
+
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+d3.selectAll("input").on("change", selectDataset);
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src='https://d3js.org/d3.v5.min.js'></script>
+<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+<script type="text/javascript" src="js/approved_dynamic_bar.js"></script>
+<title>Page Title</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+}
+
+.centered {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: left;
+}
+
+/* Style the header */
+.header {
+  padding: 5px;
+  text-align: center;
+  background: black;
+  color: #ea853c;
+}
+
+/* Increase the font size of the h1 element */
+.header h1 {
+  font-size: 40px;
+}
+
+/* Style the top navigation bar */
+.navbar {
+  overflow: hidden;
+  background-color: grey;
+}
+
+/* Style the navigation bar links */
+.navbar a {
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 20px;
+  text-decoration: none;
+}
+
+/* Right-aligned link */
+.navbar a.right {
+  float: right;
+}
+
+/* Change color on hover */
+.navbar a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Column container */
+.row {  
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Create two unequal columns that sits next to each other */
+/* Sidebar/left column */
+.side {
+  flex: 30%;
+  background-color: #f1f1f1;
+  padding: 20px;
+}
+
+/* Main column */
+.main {   
+  flex: 70%;
+  background-color: white;
+  padding: 20px;
+}
+
+/* Fake image, just for this example */
+.fakeimg {
+  background-color: #aaa;
+  width: 100%;
+  padding: 20px;
+}
+
+/* Fake image, just for this example */
+.img {
+  background-color: #aaa;
+  width: 100%;
+  padding: 20px;
+}
+
+.footer {   
+  flex: 70%;
+  padding: 20px;
+}
+
+svg {
+  width: 60%;
+  height: 80%;
+}
+
+path.slice{
+  stroke-width:2px;
+}
+
+polyline{
+  opacity: .3;
+  stroke: white;
+  stroke-width: 3px;
+  fill: none;
+}
+
+.labelValue
+{
+  font-size: 60%;
+  opacity: .5;
+  stroke: white;
+  fill: white;
+  
+}
+
+.toolTip {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    position: absolute;
+    display: none;
+    width: auto;
+    height: auto;
+    background: none repeat scroll 0 0 lightblue;
+    border: 0 none;
+    border-radius: 8px 8px 8px 8px;
+    box-shadow: -3px 3px 15px #888888;
+    color: black;
+    font: 12px sans-serif;
+    padding: 5px;
+    text-align: center;
+}
+text {
+  font: 12px sans-serif;
+  fill: white;
+}
+
+/* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 700px) {
+  .row {   
+    flex-direction: column;
+  }
+}
+
+/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
+@media screen and (max-width: 400px) {
+  .navbar a {
+    float: none;
+    width:100%;
+  }
+}
+</style>
+</head>
+<body body onload='init("Approved")'>
+
+<div class="header">
+  <h1>What Affects Your Ability to Get a Loan?</h1>
+  <p>Factors worth looking at</p>
+</div>
+
+<div class="navbar">
+  <a href="index.html">Home</a>
+  <a href="loan_income_status.html" class="right">Next</a>
+</div>
+
+<div class="row">
+  
+  <div class="main">
+    <h2>Behind every loan approval, there stands great information about a client</h2>
+    <div>
+         <p><i>Please select the button below to choose loan status , to see the impact of total loans across  each borrower property. Hover open the chart to see details.</i></p>
+        <select class="ui dropdown" onchange=init(this.value) style="background-color:blanchedalmond; margin-top:35px;margin-left: 60;height :30px;width:100px">
+                <option value ="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+                
+        </select>
+     </div> 
+
+     <div >
+        <div  id="my_dataviz" style="background-color:black"></div>
+    </div>
+
+    <p>Education is definitely an important factor and somehow ties us  also to an applicants job and income</p>
+    <p>Here we see the  distribution of approved and rejected loans and the % of borrowers having a graduate degree or not. 80% of approved loan borrowers having a graduate degree.</p>
+  </div>
+</div>
+
+<div class="footer">
+  <h4>This data was taken from Kaggle. Here is the link to it : https://www.kaggle.com/ninzaami/loan-predication</h2>
+</div>
+
+<script>
+
+
+// set the dimensions and margins of the graph
+
+    
+ var   margin = {top: 50, right: 60, bottom: 65, left: 200},
+    width = 750 - margin.left - margin.right,
+    height =500- margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// Initialize the X axis
+var x = d3.scaleBand()
+  .range([ 0, width ])
+  .padding(0.2);
+var xAxis = svg.append("g")
+  .attr("transform", "translate(0," + height + ")")
+
+// Initialize the Y axis
+var y = d3.scaleLinear()
+  .range([ height, 0]);
+var yAxis = svg.append("g")
+  .attr("class", "myYaxis")
+
+var z = d3.scaleOrdinal().range(["orange", "blue", "green"]); 
+
+
+  //change formatting
+    
+                d3.select("svg").append("text") 
+                     .attr("x", 700)
+                     .attr("y", 60)
+                     .text("Borrower Property:").attr("fill","white");
+                d3.select("svg").append("rect").attr("x",700).attr("y",80).attr("height",10).attr("width",10).attr("fill","orange")
+                 d3.select("svg").append("text") 
+                     .attr("x", 720)
+                     .attr("y", 90)
+                     .text("Rural").attr("fill","white");
+                 d3.select("svg").append("rect").attr("x",700).attr("y",100).attr("height",10).attr("width",10).attr("fill","blue")
+                 d3.select("svg").append("text") 
+                     .attr("x", 720)
+                     .attr("y", 110 )
+                     .text("Semi Urban").attr("fill","white");
+                d3.select("svg").append("rect").attr("x",700).attr("y",120).attr("height",10).attr("width",10).attr("fill","green")
+                 d3.select("svg").append("text") 
+                     .attr("x", 720)
+                     .attr("y", 130 )
+                     .text("Urban").attr("fill","white");
+
+
+const annotationsRight = [
+  {
+    note: {
+      //label: "Here is the annotation label",
+      title: "SemiUrban borrowers have more  approved loans and less Rejected loans",
+      wrap: 110,
+      padding: 3
+    },
+    connector: {
+      end: "arrow",        // none, or arrow or dot
+      type: "curve",       // Line or curve
+      points: 4,           // Number of break in the curve
+      lineType : "horizontal"
+    },
+    color: ["yellow"],
+    x: 500,
+    y: 140,
+    dy: 80,
+    dx: 220
+  }
+]
+
+// Add annotation to the chart
+const makeAnnotationsRight = d3.annotation()
+  .annotations(annotationsRight)
+d3.select("svg")
+  .append("g")
+  .call(makeAnnotationsRight)
+  
+  d3.select("svg").selectAll(".connector")
+  .attr('stroke', "yellow")
+  .style("stroke-dasharray", ("3, 3"))
+  d3.select("svg").selectAll(".connector-end")
+  .attr('stroke', "yellow")
+  .attr('fill', "yellow")
+  
+
+</script>
+
+
+</body>
+</html>

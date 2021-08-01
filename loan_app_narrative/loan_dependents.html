@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src='https://d3js.org/d3.v5.min.js'></script>
+<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+<title>Page Title</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+}
+
+/* Style the header */
+.header {
+  padding: 5px;
+  text-align: center;
+  background: black;
+  color: #ea853c;
+}
+
+/* Increase the font size of the h1 element */
+.header h1 {
+  font-size: 40px;
+}
+
+/* Style the top navigation bar */
+.navbar {
+  overflow: hidden;
+  background-color: grey;
+}
+
+/* Style the navigation bar links */
+.navbar a {
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 20px;
+  text-decoration: none;
+}
+
+/* Right-aligned link */
+.navbar a.right {
+  float: right;
+}
+
+/* Change color on hover */
+.navbar a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Column container */
+.row {  
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Create two unequal columns that sits next to each other */
+/* Sidebar/left column */
+.side {
+  flex: 30%;
+  background-color: #f1f1f1;
+  padding: 20px;
+}
+
+/* Main column */
+.main {   
+  flex: 70%;
+  background-color: white;
+  padding: 20px;
+}
+
+.footer {   
+  padding: 20px;
+}
+
+/* Fake image, just for this example */
+.img {
+  background-color: #aaa;
+  width: 100%;
+  padding: 20px;
+}
+
+/* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 700px) {
+  .row {   
+    flex-direction: column;
+  }
+}
+
+/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
+@media screen and (max-width: 400px) {
+  .navbar a {
+    float: none;
+    width:100%;
+  }
+}
+</style>
+</head>
+<body body onload='init()'>
+
+<div class="header">
+  <h1>What Affects Your Ability to Get a Loan?</h1>
+  <p>Factors worth looking at</p>
+</div>
+
+<div class="navbar">
+  <a href="index.html">Home</a>
+  <a href="loan_education.html" class="right">Next</a>
+</div>
+
+<div class="row">
+  
+  <div class="main">
+    <h2>Behind every loan approval, there stands great information about a client</h2>
+    <p><i>Please hover open the chart to see total loans for each category across dependents.</i></p>
+    <div style="background-color:black">
+      <svg width=600 height=500>
+            </svg>
+            <script type="text/javascript" src="js/bar_chart.js"></script>
+    </div>
+    <p>As a part of our discussion across various attributes of a borrower, one of the  factors which we thought worth discussing is borrowers  family</p>
+    <p>Vast majority of the approved loans are from  applicants who are single or have 0 dependents. The more the number of dependents, the total number of loans approved  is very less. This may attrbute to the fact that they may be single earners.</p>
+  </div>
+</div>
+<div class="footer">
+  <h4>This data was taken from Kaggle. Here is the link to it : https://www.kaggle.com/ninzaami/loan-predication</h2>
+</div>
+</body>
+</html>
