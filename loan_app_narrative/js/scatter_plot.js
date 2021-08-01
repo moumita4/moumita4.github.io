@@ -114,11 +114,17 @@ var mouseleave = function(d) {
     .attr("transform", function(d) { 
       return "translate(" + x(d.ApplicantIncome) + "," + y(d.LoanAmount) +")"; 
     })
-    .on("mouseover", function(d) {
-       div
-       .transition()
-       .duration(20)
-         .style("opacity", .9);
+    .on("mouseover", function(d,i) {
+    //d3.select(this).transition()
+      //         .duration('50')
+        //       .attr('opacity', '.9');
+          div.transition()
+               .duration('50')
+               .style("opacity", 1);
+       //div
+       //.transition()
+       //.duration(20)
+        // .attr("opacity", '.85');
        div .html("Gender:"+
          d.Gender + // The first <a> tag
          "<br/>"  + 
@@ -127,8 +133,17 @@ var mouseleave = function(d) {
          .style("left", (d3.event.pageX) + "px")             
          .style("top", (d3.event.pageY - 28) + "px");
        })
-      .on("mouseleave", mouseleave );
-  
+      //.on("mouseleave", mouseleave );
+      .on('mouseout', function (d, i) {
+          //d3.select(this).transition()
+            //   .duration('300')
+             //  .attr('opacity', '1');
+          div
+          //.transition()
+            //   .duration('300')
+               .style("opacity", 0);
+     });
+      
  
   var clicked = ""
   
