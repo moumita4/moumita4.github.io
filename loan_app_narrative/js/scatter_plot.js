@@ -90,7 +90,7 @@ d3.csv('https://moumita4.github.io/Final_Lending_data.csv', function(d){
   // Its opacity is set to 0: we don't see it by default.
 var div = d3.select("#my_dataviz").append("div")
     .attr("class", "tooltip")
-   .style("opacity", 1);
+   .style("opacity", 0);
     
 var mouseleave = function(d) {
     	//tooltip
