@@ -148,7 +148,7 @@ var mouseleave = function(d) {
   {
     note: {
       //label: "Here is the annotation label",
-      title: "",
+      title: "85K income applicant got rejected, seems to be an outlier",
       wrap: 110,
       padding: 3
     },
@@ -180,7 +180,7 @@ const annotationsRight = [
       points: 1,           // Number of break in the curve
       lineType : "horizontal"
     },
-    color: ["yellow"],
+    color: ["white"],
     x: 720,
     y: 270,
     dy: 50,
