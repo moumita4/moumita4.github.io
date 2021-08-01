@@ -180,7 +180,7 @@ const annotationsRight = [
       points: 1,           // Number of break in the curve
       lineType : "horizontal"
     },
-    color: ["white"],
+    color: ["yellow"],
     x: 720,
     y: 270,
     dy: 50,
