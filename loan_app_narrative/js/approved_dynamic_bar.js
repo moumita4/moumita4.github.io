@@ -59,6 +59,9 @@ function update(data) {
     .enter()
     .append("rect") // Add a new rect for each new elements
     .merge(u) // get the already existing elements as well
+    .on("mouseover", d => {tooltip.text("Total loans" + " : " + (d.value)); return tooltip.style("visibility", "visible")})
+    .on("mousemove", function(){return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
+    .on("mouseout", () => tooltip.style("visibility", "hidden"))
     .transition() // and apply changes to all of them
     .duration(1000)
       .attr("x", function(d) { return x(d.key); })
@@ -67,6 +70,16 @@ function update(data) {
       .attr("height", function(d) { return height - y(d.value); })
     	.attr("fill", function(d) { return z(d.key); })
      // .attr("fill", "#69b3a2")
+
+
+
+var tooltip = d3.select("body")
+                .append("div")
+                    .attr("class", "tooltip")
+                    .style("position", "absolute")
+                    .style("z-index", 10)
+                    .style("visibility", "hidden")
+                    .text("Simple text");
 
   // If less group in the new dataset, I delete the ones not in use anymore
   u
