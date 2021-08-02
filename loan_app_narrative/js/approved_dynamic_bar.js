@@ -49,6 +49,15 @@ function update(data) {
   .attr("stroke","white").attr("fill","white")
   
 
+     svg.append("text")
+     .attr("transform", "rotate(-90)")
+      .attr("y", -margin.left+130)
+      .attr("x", -margin.top -80)
+      .attr("dy", "0.32em")
+      .attr("text-anchor", "middle")
+      .attr("style","font-size:15px;")
+      .text("Total Loans");
+
 
 
   // Create the u variable
